@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
 <title>MyTesla – åter till appen</title>
 <style>
   :root { color-scheme: dark; }
@@ -47,6 +48,13 @@
   (function () {
     var target = "mytesla://callback" + window.location.search;
     document.getElementById("open").href = target;
+    // Töm adressfältet och historiken på code/state innan appen öppnas, så att
+    // engångskoden inte ligger kvar i webbläsarens historik.
+    try {
+      window.history.replaceState(null, "", window.location.pathname);
+    } catch (e) {
+      // Historiken kan vara låst i vissa webbläsare – redirecten gäller ändå.
+    }
     window.setTimeout(function () {
       window.location.href = target;
     }, 50);
